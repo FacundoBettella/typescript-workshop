@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
+import { StatefulInput } from 'baseui/input';
 
 // Si pasamos un objeto usamos interface =>
 interface Person {
     firstName: string
     lastName: string
 }
-
 interface AppProps {
     text: string;
     person: Person;
@@ -20,6 +20,9 @@ interface ITask {
 
 // Si no es un objeto usar type =>
 type FormElement = React.FormEvent<HTMLFormElement>;
+type ButtonElement = React.MouseEvent<HTMLButtonElement>;
+
+
 
 export const TextField: React.FC<AppProps> = ({ person, text }) => {
     // TO DO LIST -----------------------------------
@@ -35,6 +38,11 @@ export const TextField: React.FC<AppProps> = ({ person, text }) => {
     const addTask = (name: string) => {
         const newTasks: ITask[] = [...tasks, { name, done: false }];
         setTasks(newTasks);
+    }
+
+    const handleClearTask = (e: ButtonElement) => {
+        e.preventDefault();
+        setTasks([]);
     }
 
     //-------------------------------------------------
@@ -53,11 +61,14 @@ export const TextField: React.FC<AppProps> = ({ person, text }) => {
             <div>{person.lastName}</div>
             <br /><hr />
 
+            {/* <StatefulInput /> */}
+
             <pre>Create a to do: </pre>
             <form onSubmit={handleSubmit}>
-                <p>{newTask}</p>
                 <input type="text" value={newTask} onChange={e => setNewTask(e.target.value)} />
                 <button>Guardar</button>
+                <button onClick={e => handleClearTask(e)}>X</button>
+                <p>{newTask}</p>
             </form>
             <p>
                 {tasks.map((toDo: ITask, i: number) => {
